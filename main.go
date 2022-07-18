@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fmt"
-	"strings"
 	"BOOKING_APP/helper"
+	"fmt"
+	"strconv"
+	// "strings"
 )
 
 //package level variable
@@ -12,7 +13,7 @@ var conferenceName = "Go Conference"
 const conferenceTicket int = 50
 
 var remainingTicket int = 50
-var booking []string
+var booking = make([]map[string]string, 0)
 
 func main() {
 
@@ -83,15 +84,13 @@ func getFirstName() []string {
 
 	// }
 	for _, bookings := range booking {
-		var name = strings.Fields(bookings)
-		firstNames = append(firstNames, name[0])
+
+		firstNames = append(firstNames, bookings["firstName"])
 		// fmt.Printf("The booking user is %v\n", firstNames)
 	}
 	return firstNames
 
 }
-
-
 
 func getUserInput() (string, string, string, int) {
 	var firstName string
@@ -117,15 +116,21 @@ func getUserInput() (string, string, string, int) {
 func bookTicket(userTicket int, firstName string, lastName string, email string) {
 
 	remainingTicket = remainingTicket - userTicket
-	booking = append(booking, firstName+" "+lastName)
+	var userData = make(map[string]string)
+	userData["firstName"] = firstName
+	userData["lastName"] = lastName
+	userData["email"] = email
+	userData["numberOfTicket"] = strconv.Itoa(userTicket)
+
+	booking = append(booking, userData)
 
 	fmt.Printf("user %v %v is get %v ticket. \n", firstName, lastName, userTicket)
 	fmt.Printf("thank you and an invitation is send to your email address at %v.\n", email)
-	fmt.Printf("Remaining ticket are %v \n", remainingTicket)
+	//fmt.Printf("Remaining ticket are %v \n", remainingTicket)
 
 }
 
-// func swicthCaseGo()  {
+// func switchCaseGo()  {
 
 // 	city := "Dhaka"
 
