@@ -3,7 +3,7 @@ package main
 import (
 	"BOOKING_APP/helper"
 	"fmt"
-	"strconv"
+	// "strconv"
 	// "strings"
 )
 
@@ -13,7 +13,16 @@ var conferenceName = "Go Conference"
 const conferenceTicket int = 50
 
 var remainingTicket int = 50
-var booking = make([]map[string]string, 0)
+// var booking = make([]map[string]string, 0)
+var booking = make([]UserData, 0)
+
+
+type UserData struct {
+	firstName  string
+	lastName   string
+	email      string
+	userTicket int
+}
 
 func main() {
 
@@ -85,7 +94,7 @@ func getFirstName() []string {
 	// }
 	for _, bookings := range booking {
 
-		firstNames = append(firstNames, bookings["firstName"])
+		firstNames = append(firstNames, bookings.firstName)
 		// fmt.Printf("The booking user is %v\n", firstNames)
 	}
 	return firstNames
@@ -116,13 +125,26 @@ func getUserInput() (string, string, string, int) {
 func bookTicket(userTicket int, firstName string, lastName string, email string) {
 
 	remainingTicket = remainingTicket - userTicket
-	var userData = make(map[string]string)
-	userData["firstName"] = firstName
-	userData["lastName"] = lastName
-	userData["email"] = email
-	userData["numberOfTicket"] = strconv.Itoa(userTicket)
+	// var userData = make(map[string]string)
+	// userData["firstName"] = firstName
+	// userData["lastName"] = lastName
+	// userData["email"] = email
+	// userData["numberOfTicket"] = strconv.Itoa(userTicket)
+
+	var userData = UserData{
+
+		firstName: firstName,
+		lastName : lastName,
+		email: email,
+		userTicket: userTicket,
+
+	}
+
 
 	booking = append(booking, userData)
+	fmt.Printf("UserData is: %v\n", userData)
+
+	fmt.Printf("List of user is: %v\n", booking)
 
 	fmt.Printf("user %v %v is get %v ticket. \n", firstName, lastName, userTicket)
 	fmt.Printf("thank you and an invitation is send to your email address at %v.\n", email)
