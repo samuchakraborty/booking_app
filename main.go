@@ -3,9 +3,14 @@ package main
 import (
 	"BOOKING_APP/helper"
 	"fmt"
+	"time"
+	"sync"
 	// "strconv"
 	// "strings"
 )
+
+
+var wait =sync.WaitGroup{}
 
 //package level variable
 var conferenceName = "Go Conference"
@@ -13,9 +18,9 @@ var conferenceName = "Go Conference"
 const conferenceTicket int = 50
 
 var remainingTicket int = 50
+
 // var booking = make([]map[string]string, 0)
 var booking = make([]UserData, 0)
-
 
 type UserData struct {
 	firstName  string
@@ -38,6 +43,8 @@ func main() {
 		if isValidateName && isValidateEmail && isValidateTicketNumber {
 
 			bookTicket(userTicket, firstName, lastName, email)
+			wait.Add(1)
+			go sendTicket(userTicket, firstName, lastName, email)
 			firstNames := getFirstName()
 
 			fmt.Printf("The booking user is %v\n", firstNames)
@@ -68,7 +75,7 @@ func main() {
 
 			continue
 		}
-
+wait.Wait()
 	}
 
 }
@@ -133,13 +140,11 @@ func bookTicket(userTicket int, firstName string, lastName string, email string)
 
 	var userData = UserData{
 
-		firstName: firstName,
-		lastName : lastName,
-		email: email,
+		firstName:  firstName,
+		lastName:   lastName,
+		email:      email,
 		userTicket: userTicket,
-
 	}
-
 
 	booking = append(booking, userData)
 	fmt.Printf("UserData is: %v\n", userData)
@@ -149,6 +154,19 @@ func bookTicket(userTicket int, firstName string, lastName string, email string)
 	fmt.Printf("user %v %v is get %v ticket. \n", firstName, lastName, userTicket)
 	fmt.Printf("thank you and an invitation is send to your email address at %v.\n", email)
 	//fmt.Printf("Remaining ticket are %v \n", remainingTicket)
+
+}
+
+func sendTicket(userTicket int, firstName string, lastName string, email string) {
+
+	time.Sleep(50 * time.Second)
+	var user = fmt.Sprintf("%v tickets are for %v %v\n", userTicket, firstName, lastName)
+
+	fmt.Println("###########")
+	fmt.Printf("%v tickets are send to %v \n", userTicket, email)
+	fmt.Println("###########")
+	fmt.Print(user)
+	wait.Done()
 
 }
 
